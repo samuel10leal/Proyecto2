@@ -47,14 +47,23 @@ public class Encuesta extends Actividad {
 
 	@Override
 	public void realizar(ProgresoActividad progreso) {
-		// TODO Auto-generated method stub
-		Estudiante estudiante = progreso.getEstudiante();
-    	Scanner scanner = new Scanner(System.in);
-		responder(scanner, estudiante);
-		
-        progreso.marcarRealizada("Aprobada", new Date());
-        progreso.completarActividad("Aprobada");
-        System.out.println("Has completado la encuesta: " + descripcion + "\n");
+	    // Obtener el estudiante que va a realizar la encuesta
+	    Estudiante estudiante = progreso.getEstudiante();
+	    
+	    // Inicializar el scanner para las respuestas
+	    Scanner scanner = new Scanner(System.in);
+
+	    // Establecer la fecha de inicio
+	    progreso.setFechaInicio(new Date());
+	    
+	    // Llamar al método para que el estudiante responda la encuesta
+	    responder(scanner, estudiante);
+
+	    // Marcar la encuesta como realizada
+	    progreso.marcarRealizada("Aprobada", new Date());
+	    progreso.completarActividad("Aprobada");
+
+	    System.out.println("Has completado la encuesta: " + descripcion + "\n");
 	}
 	
 	@Override
