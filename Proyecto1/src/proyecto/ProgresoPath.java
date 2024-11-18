@@ -103,6 +103,8 @@ import java.util.List;
     	this.tasaExito = (float) (exito * 100)/(actividadesRealizadas.size());
     	this.tasaFracaso = (float) (fracaso * 100)/(actividadesRealizadas.size());
     }
-    
+    public Object getFechaFinPath() {
+		return fechaFinPath;
+	}
     
 }
