@@ -46,6 +46,7 @@ public class RecursoEducativo extends Actividad{
 
 	@Override
 	public void realizar(ProgresoActividad progreso) {
+		progreso.setFechaInicio(new Date());
 		progreso.marcarRealizada("Aprobada", new Date());
 		progreso.completarActividad("Aprobada");
         System.out.println("Has completado el recurso educativo: " + descripcion);
