@@ -104,7 +104,7 @@ public class Quiz extends Actividad{
 	
 	@Override
 	public void realizar(ProgresoActividad progreso) {
-		// TODO Auto-generated method stub
+		progreso.setFechaInicio(new Date());
         Scanner sc = new Scanner(System.in);
 		String rta = realizarQuiz(sc);
 		progreso.marcarRealizada("Enviada", new Date());
