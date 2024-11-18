@@ -4,7 +4,7 @@ public class Reseña {
 	
 	//Atributos
 	private String texto;
-    private float rating;
+        private float rating;
     
     //Constructor
 	public Reseña(String texto, float rating) {
@@ -24,6 +24,7 @@ public class Reseña {
 	public void hacerReseña(Actividad actividad){
 		if (rating < 0 || rating > 10) {
 	        System.out.println("El rating debe estar entre 0 y 10.");
+		   return;
 	    }
 	    actividad.agregarReseña(this);
 	    System.out.println("Reseña agregada con éxito. Gracias por ayudarnos a mejorar!");
