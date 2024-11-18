@@ -20,6 +20,7 @@ public class Registro {
     public Registro() {
     	profesores = new ArrayList<>();
 		estudiantes = new ArrayList<>();
+	usuarios = new ArrayList<>();
         persistencia = new PersistenciaUsuarios();
         paths = new ArrayList<>();
         
