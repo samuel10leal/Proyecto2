@@ -76,7 +76,51 @@ public class LearningPath {
         }
     }
     
-    //Rating
+    public Profesor getCreador() {
+		return creador;
+	}
+
+	public void setCreador(Profesor creador) {
+		this.creador = creador;
+	}
+
+	public String getObjetivos() {
+		return objetivos;
+	}
+
+	public void setObjetivos(String objetivos) {
+		this.objetivos = objetivos;
+	}
+
+	public String getNivelDificultad() {
+		return nivelDificultad;
+	}
+
+	public void setNivelDificultad(String nivelDificultad) {
+		this.nivelDificultad = nivelDificultad;
+	}
+
+	public int getDuracionEstimada() {
+		return duracionEstimada;
+	}
+
+	public void setDuracionEstimada(int duracionEstimada) {
+		this.duracionEstimada = duracionEstimada;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Date getFechaModificacion() {
+		return fechaModificacion;
+	}
+
+	//Rating
     public double calcularPromedioRating() {
         if (actividades.isEmpty()) {
             return 0; // Si no hay actividades, el promedio es 0
