@@ -40,6 +40,7 @@ public abstract class Actividad implements Cloneable{
 		this.creador = creador;
 		this.respuesta = new HashMap <Estudiante, String>();
 		this.tipo = "";
+		this.reseñas = new ArrayList<>();
 	}
 	
 	//Get and set
