@@ -50,7 +50,7 @@ public class Tarea extends Actividad {
 
 	@Override
 	public void realizar(ProgresoActividad progreso) {
-		// TODO Auto-generated method stub
+		progreso.setFechaInicio(new Date());
         Scanner scanner = new Scanner(System.in);
 		enviarTarea(scanner, progreso);
 		progreso.marcarRealizada("Enviada", new Date());
