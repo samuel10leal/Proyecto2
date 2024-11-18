@@ -36,45 +36,46 @@ public class PreguntaMultiple {
 	}
 	
 	//Metodos
-    public boolean mostrarYResolver(Scanner scanner) {
+	public boolean mostrarYResolver(Scanner scanner) {
+	    System.out.println(textoPregunta);
 
-		System.out.println(textoPregunta);
-		
-		for (int i = 0; i < opciones.size(); i++) {
-		    System.out.println((i + 1) + ". " + opciones.get(i));
-		}
-		
-		boolean valida = false;
-		int respuestaElegida = -1;
-		
-		while (!valida) {
+	    // Mostrar las opciones de respuesta
+	    for (int i = 0; i < opciones.size(); i++) {
+	        System.out.println((i + 1) + ". " + opciones.get(i));
+	    }
+
+	    int respuestaElegida = -1;
+	    while (true) {
 	        System.out.print("Elige una opción (1-4): ");
+	        String input = scanner.nextLine();
+
 	        try {
-	            respuestaElegida = Integer.parseInt(scanner.nextLine());
+	            respuestaElegida = Integer.parseInt(input);
 
 	            // Verificar si la opción está en el rango esperado (1-4)
 	            if (respuestaElegida >= 1 && respuestaElegida <= 4) {
-	                valida = true;
+	                break; // Entrada válida, salir del ciclo
 	            } else {
 	                System.out.println("Opción no válida. Intenta nuevamente.");
 	            }
 	        } catch (NumberFormatException e) {
 	            System.out.println("Entrada no válida. Por favor, ingresa un número entre 1 y 4.");
 	        }
-		}
+	    }
 
-        boolean esCorrecta = (respuestaElegida == opcionCorrecta);
-        
-        if (esCorrecta) {
-            System.out.println("¡Correcto!");
-        } else {
-            System.out.println("Incorrecto.");
-        }
-        System.out.println(explicaciones.get(respuestaElegida));
-        
-		return esCorrecta;
-        
-    }
-    
+	    boolean esCorrecta = (respuestaElegida == opcionCorrecta);
+
+	    // Mostrar si la respuesta fue correcta o incorrecta
+	    if (esCorrecta) {
+	        System.out.println("¡Correcto!");
+	    } else {
+	        System.out.println("Incorrecto.");
+	    }
+
+	    // Mostrar la explicación correspondiente (ajustar el índice para la base 0)
+	    System.out.println(explicaciones.get(respuestaElegida - 1));
+
+	    return esCorrecta;
+	}    
     
 }
