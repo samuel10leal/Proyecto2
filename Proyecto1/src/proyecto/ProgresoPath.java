@@ -53,6 +53,10 @@ import java.util.List;
 	public Estudiante getEstudiante() {
 		return estudiante;
 	}
+
+	public float getTasaFracaso() {
+		return tasaFracaso;
+	}
 	
 	//Métodos
 	public void agregarActividadRealizada(Actividad actividad) {
