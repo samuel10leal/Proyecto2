@@ -24,7 +24,15 @@ public class Registro {
         paths = new ArrayList<>();
         
 	}
+	
+    public List<Profesor> getProfesores() {
+        return profesores;
+    }
 
+    public List<Estudiante> getEstudiantes() {
+        return estudiantes;
+    }
+	
     public List<LearningPath> getPaths() {
 		return paths;
 	}
