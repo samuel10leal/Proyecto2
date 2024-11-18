@@ -33,6 +33,10 @@ public class Quiz extends Actividad{
 
 	
 	//Metodos
+
+    public List<PreguntaMultiple> getPreguntas() {
+	    return preguntas;
+	}
     public void agregarPregunta(Scanner scanner) {
 	    List<String> opciones = new ArrayList<String>();
 	    List<String> explicaciones = new ArrayList<String>();
