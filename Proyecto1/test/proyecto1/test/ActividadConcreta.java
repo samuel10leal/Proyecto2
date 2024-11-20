@@ -14,11 +14,11 @@ public class ActividadConcreta extends Actividad {
 
     @Override
     public void realizar(ProgresoActividad progreso) {
-        // Implementación específica de realizar
+        
     }
 
     @Override
     public void editar(Profesor editor) {
-        // Implementación específica de editar
+        
     }
 }
