@@ -18,6 +18,7 @@ public class LearningPath {
     private int version;
     private List<Actividad> actividades;
     private Profesor creador; // El profesor que creó el Learning Path
+    private List<ProgresoPath> progresos; // Lista de progresos de los estudiantes
     
 	//Constructor
     public LearningPath(String titulo, String descripcion, String objetivos, String nivelDificultad, Profesor creador, int duracionEstimada) {
@@ -32,6 +33,7 @@ public class LearningPath {
         this.fechaModificacion = new Date();
         this.duracionEstimada = duracionEstimada;
         this.version = 1;
+        this.progresos = new ArrayList<>(); // Inicializamos la lista de progresos
         this.rating = calcularPromedioRating();
         //TO-DO RATING
 	}
@@ -42,7 +44,14 @@ public class LearningPath {
 	}
 	public String getDescripcion() {
 		return descripcion;
+
 	}
+    public List<ProgresoPath> getProgresos() {
+        return progresos;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
 	public void setFechaModificacion(Date date) {
 		this.fechaModificacion= date ;
@@ -143,4 +152,3 @@ public class LearningPath {
         }
     }
 }
-
