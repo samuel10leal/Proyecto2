@@ -1,0 +1,74 @@
+[
+    {
+        "titulo": "Introduccion a la Programacion",
+        "descripcion": "Aprende los fundamentos de la programacion.",
+        "objetivos": "Comprender los conceptos b·sicos de programacion.",
+        "nivelDificultad": "Facil",
+        "duracionEstimada": 7,
+        "actividades": [
+            {
+                "descripcion": "Instalacion de IDE",
+                "tipo": "Practica",
+                "duracionEsperada": 60,
+                "objetivo": "Instalar un entorno de desarrollo integrado.",
+                "nivelDificultad": "Facil"
+            },
+            {
+                "descripcion": "Hola Mundo",
+                "tipo": "Practica",
+                "duracionEsperada": 30,
+                "objetivo": "Escribir y ejecutar el primer programa.",
+                "nivelDificultad": "Facil"
+            }
+        ],
+        "progresos": []
+    },
+    {
+        "titulo": "Algoritmos y Estructuras de Datos",
+        "descripcion": "Estudia los algoritmos y estructuras de datos fundamentales.",
+        "objetivos": "Aprender a implementar y utilizar diferentes estructuras de datos.",
+        "nivelDificultad": "Intermedio",
+        "duracionEstimada": 14,
+        "actividades": [
+            {
+                "descripcion": "Listas Enlazadas",
+                "tipo": "Teoriia",
+                "duracionEsperada": 120,
+                "objetivo": "Comprender el funcionamiento de las listas enlazadas.",
+                "nivelDificultad": "Intermedio"
+            },
+            {
+                "descripcion": "Algoritmos de Busqueda",
+                "tipo": "Practica",
+                "duracionEsperada": 90,
+                "objetivo": "Implementar y probar algoritmos de busqueda.",
+                "nivelDificultad": "Intermedio"
+            }
+        ],
+        "progresos": []
+    },
+    {
+        "titulo": "Desarrollo Web",
+        "descripcion": "ConviÈrtete en un desarrollador web completo.",
+        "objetivos": "Dominar el desarrollo web front-end y back-end.",
+        "nivelDificultad": "Avanzado",
+        "duracionEstimada": 30,
+        "actividades": [
+            {
+                "descripcion": "HTML y CSS B·sico",
+                "tipo": "Practica",
+                "duracionEsperada": 180,
+                "objetivo": "Crear una pagina web simple utilizando HTML y CSS.",
+                "nivelDificultad": "Facil"
+            },
+            {
+                "descripcion": "Desarrollo con JavaScript",
+                "tipo": "Practica",
+                "duracionEsperada": 240,
+                "objetivo": "Agregar interactividad a una p·gina web utilizando JavaScript.",
+                "nivelDificultad": "Intermedio"
+            }
+        ],
+        "progresos": []
+    }
+]
