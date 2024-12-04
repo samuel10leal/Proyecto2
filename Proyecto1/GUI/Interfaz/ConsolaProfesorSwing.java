@@ -4,8 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Optional;
+import java.util.Scanner;
+
+import proyecto.Actividad;
+import proyecto.Encuesta;
+import proyecto.Examen;
+import proyecto.LearningPath;
 import proyecto.Profesor;
+import proyecto.Quiz;
+import proyecto.RecursoEducativo;
 import proyecto.Registro;
+import proyecto.Tarea;
+import proyecto1.test.ActividadConcreta;
 
 public class ConsolaProfesorSwing {
     private Registro registro;
@@ -53,7 +64,7 @@ public class ConsolaProfesorSwing {
         btnRegistro.addActionListener(e -> manejarRegistroInicioSesion());
         btnCrearLP.addActionListener(e -> crearLearningPath());
         btnEditarLP.addActionListener(e -> editarEliminarLearningPath());
-        btnActividades.addActionListener(e -> añadirEditarActividades());
+        btnActividades.addActionListener(e -> añadirActividad());
         btnProgreso.addActionListener(e -> verProgresoEstudiantes());
         btnCalificar.addActionListener(e -> calificarActividades());
         btnNotificaciones.addActionListener(e -> verNotificaciones());
@@ -162,9 +173,159 @@ public class ConsolaProfesorSwing {
         return true;
     }
 
-    private void añadirEditarActividades() {
-        JOptionPane.showMessageDialog(null, "Funcionalidad aún no implementada.");
+    private void añadirActividad() {
+        if (!validarSesion()) {
+            return;
+        }
+
+        // Solicitar Learning Path
+        String tituloLP = JOptionPane.showInputDialog("Ingrese el título del Learning Path:");
+        if (tituloLP == null || tituloLP.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El título del Learning Path no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Solicitar detalles de la actividad
+        String tituloActividad = JOptionPane.showInputDialog("Ingrese el título de la nueva actividad:");
+        if (tituloActividad == null || tituloActividad.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El título de la actividad no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String descripcion = JOptionPane.showInputDialog("Ingrese la descripción de la nueva actividad:");
+        if (descripcion == null || descripcion.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "La descripción de la actividad no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String objetivo = JOptionPane.showInputDialog("Ingrese el objetivo de la nueva actividad:");
+        if (objetivo == null || objetivo.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El objetivo de la actividad no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String nivelDificultad = JOptionPane.showInputDialog("Ingrese el nivel de dificultad de la nueva actividad:");
+        if (nivelDificultad == null || nivelDificultad.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El nivel de dificultad de la actividad no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String duracionEsperadaStr = JOptionPane.showInputDialog("Ingrese la duración esperada de la nueva actividad (en horas):");
+        if (duracionEsperadaStr == null || duracionEsperadaStr.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "La duración esperada de la actividad no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int duracionEsperada;
+        try {
+            duracionEsperada = Integer.parseInt(duracionEsperadaStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "La duración esperada debe ser un número entero.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Preguntar si la actividad es obligatoria
+        int obligatorioOption = JOptionPane.showConfirmDialog(null, "¿Es esta actividad obligatoria?", "Obligatoriedad", JOptionPane.YES_NO_OPTION);
+        boolean obligatorio = (obligatorioOption == JOptionPane.YES_OPTION);
+
+        Profesor creador = profesorActual; // Asumiendo que el creador es el profesor actual
+
+        // Mostrar un cuadro de selección para elegir el tipo de actividad
+        Object[] opcionesActividad = {"Recurso Educativo", "Encuesta", "Tarea", "Quiz", "Examen"};
+        String tipoActividad = (String) JOptionPane.showInputDialog(
+                null, 
+                "Seleccione el tipo de actividad", 
+                "Tipo de Actividad", 
+                JOptionPane.PLAIN_MESSAGE, 
+                null, 
+                opcionesActividad, 
+                opcionesActividad[0]
+        );
+
+        if (tipoActividad == null) {
+            return; // El usuario canceló
+        }
+
+        // Crear la actividad según el tipo seleccionado
+        profesorActual.getLearningPathsCreados()
+                .stream()
+                .filter(lp -> lp.getTitulo().equalsIgnoreCase(tituloLP))
+                .findFirst()
+                .ifPresentOrElse(lp -> {
+                    Actividad nuevaActividad = null;
+
+                    switch (tipoActividad) {
+                        case "Quiz":
+                            // Crear un Quiz y agregarlo al Learning Path
+                            double notaAprobacion = solicitarNotaAprobacion(); // Método que solicita la nota de aprobación
+                            nuevaActividad = new Quiz(lp, descripcion, objetivo, nivelDificultad, duracionEsperada, obligatorio, notaAprobacion, creador);
+
+                            // Solicitar las preguntas para el Quiz
+                            int cantidadPreguntasQuiz = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántas preguntas deseas agregar al Quiz?"));
+                            for (int i = 0; i < cantidadPreguntasQuiz; i++) {
+                                // Solicitar pregunta y opciones
+                                ((Quiz) nuevaActividad).agregarPregunta(new Scanner(System.in)); // Agrega las preguntas usando Scanner
+                            }
+                            break;
+                        case "Examen":
+                            // Crear un Examen y agregarlo al Learning Path
+                            nuevaActividad = new Examen(lp, descripcion, objetivo, nivelDificultad, duracionEsperada, obligatorio, creador);
+
+                            // Solicitar las preguntas para el Examen
+                            int cantidadPreguntasExamen = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántas preguntas deseas agregar al Examen?"));
+                            for (int i = 0; i < cantidadPreguntasExamen; i++) {
+                                // Solicitar pregunta abierta para el examen
+                                ((Examen) nuevaActividad).agregarPregunta(new Scanner(System.in)); // Agrega las preguntas usando Scanner
+                            }
+                            break;
+                        case "Encuesta":
+                            // Crear una Encuesta y agregarla al Learning Path
+                            nuevaActividad = new Encuesta(lp, descripcion, objetivo, nivelDificultad, duracionEsperada, obligatorio, creador);
+
+                            // Solicitar las preguntas para la Encuesta
+                            int cantidadPreguntasEncuesta = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántas preguntas deseas agregar a la Encuesta?"));
+                            for (int i = 0; i < cantidadPreguntasEncuesta; i++) {
+                                // Solicitar pregunta abierta para la encuesta
+                                ((Encuesta) nuevaActividad).agregarPregunta(new Scanner(System.in)); // Agrega las preguntas usando Scanner
+                            }
+                            break;
+                        case "Recurso Educativo":
+                            // Solicitar tipo de recurso y enlace
+                            String tipoRecurso = JOptionPane.showInputDialog("Ingrese el tipo de recurso educativo (por ejemplo, video, artículo, etc.):");
+                            String enlaceRecurso = JOptionPane.showInputDialog("Ingrese el enlace del recurso educativo:");
+
+                            nuevaActividad = new RecursoEducativo(lp, descripcion, objetivo, nivelDificultad, duracionEsperada, obligatorio, tipoRecurso, enlaceRecurso, creador);
+                            break;
+                        case "Tarea":
+                            nuevaActividad = new Tarea(lp, descripcion, objetivo, nivelDificultad, duracionEsperada, obligatorio, creador);
+                            break;
+                    }
+
+                    if (nuevaActividad != null) {
+                        lp.getActividades().add(nuevaActividad);
+                        JOptionPane.showMessageDialog(null, "Actividad añadida exitosamente.");
+                    }
+                }, () -> {
+                    JOptionPane.showMessageDialog(null, "Learning Path no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+                });
     }
+
+    // Método auxiliar para solicitar la nota de aprobación del Quiz
+    private double solicitarNotaAprobacion() {
+        String input = JOptionPane.showInputDialog("Ingrese la nota de aprobación (0-10) para el Quiz:");
+        try {
+            double nota = Double.parseDouble(input);
+            if (nota < 0 || nota > 10) {
+                JOptionPane.showMessageDialog(null, "La nota de aprobación debe estar entre 0 y 10.", "Error", JOptionPane.ERROR_MESSAGE);
+                return solicitarNotaAprobacion();
+            }
+            return nota;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Entrada no válida. Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return solicitarNotaAprobacion();
+        }
+    }
+
+
 
     private void verProgresoEstudiantes() {
         JOptionPane.showMessageDialog(null, "Funcionalidad aún no implementada.");
