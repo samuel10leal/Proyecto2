@@ -132,38 +132,68 @@ public class ConsolaProfesorSwing {
     private void editarEliminarLearningPath() {
         if (!validarSesion()) return;
 
+        // Obtener la lista de Learning Paths creados por el profesor
+        if (profesorActual.getLearningPathsCreados().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se ha creado ningún Learning Path.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
         // Mostrar lista de Learning Paths
         String[] opciones = profesorActual.getLearningPathsCreados()
                 .stream()
-                .map(lp -> lp.getTitulo())
+                .map(LearningPath::getTitulo)
                 .toArray(String[]::new);
 
-        String titulo = (String) JOptionPane.showInputDialog(null, "Seleccione un Learning Path:", "Editar/Eliminar",
-                JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+        String titulo = (String) JOptionPane.showInputDialog(
+                null, 
+                "Seleccione un Learning Path:", 
+                "Editar/Eliminar",
+                JOptionPane.QUESTION_MESSAGE, 
+                null, 
+                opciones, 
+                opciones.length > 0 ? opciones[0] : null);
 
         if (titulo != null) {
             // Opciones de edición o eliminación
             String[] acciones = {"Editar", "Eliminar"};
-            int accion = JOptionPane.showOptionDialog(null, "¿Qué desea hacer?", "Acción",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, acciones, acciones[0]);
+            int accion = JOptionPane.showOptionDialog(
+                    null, 
+                    "¿Qué desea hacer?", 
+                    "Acción",
+                    JOptionPane.DEFAULT_OPTION, 
+                    JOptionPane.INFORMATION_MESSAGE, 
+                    null, 
+                    acciones, 
+                    acciones[0]);
 
             if (accion == 0) { // Editar
                 String nuevaDescripcion = JOptionPane.showInputDialog("Nueva descripción:");
-                if (nuevaDescripcion != null) {
+                if (nuevaDescripcion != null && !nuevaDescripcion.trim().isEmpty()) {
                     profesorActual.getLearningPathsCreados()
                             .stream()
                             .filter(lp -> lp.getTitulo().equalsIgnoreCase(titulo))
                             .findFirst()
                             .ifPresent(lp -> lp.setDescripcion(nuevaDescripcion));
                     JOptionPane.showMessageDialog(null, "Descripción actualizada.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "La descripción no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } else if (accion == 1) { // Eliminar
-                profesorActual.getLearningPathsCreados()
-                        .removeIf(lp -> lp.getTitulo().equalsIgnoreCase(titulo));
-                JOptionPane.showMessageDialog(null, "Learning Path eliminado.");
+                int confirmacion = JOptionPane.showConfirmDialog(
+                        null, 
+                        "¿Está seguro de que desea eliminar este Learning Path?", 
+                        "Confirmación", 
+                        JOptionPane.YES_NO_OPTION);
+
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                    profesorActual.getLearningPathsCreados()
+                            .removeIf(lp -> lp.getTitulo().equalsIgnoreCase(titulo));
+                    JOptionPane.showMessageDialog(null, "Learning Path eliminado.");
+                }
             }
         }
     }
+
 
     private boolean validarSesion() {
         if (profesorActual == null) {
@@ -324,6 +354,9 @@ public class ConsolaProfesorSwing {
             return solicitarNotaAprobacion();
         }
     }
+    
+    
+
 
 
 
