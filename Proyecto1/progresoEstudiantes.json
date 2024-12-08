@@ -1,0 +1,60 @@
+[
+    {
+        "nombre": "Juan Perez",
+        "correo": "juan.perez@example.com",
+        "contrasena": "password123",
+        "learningPaths": [
+            {
+                "titulo": "Java Basics",
+                "progreso": 50,
+                "actividades": [
+                    {"titulo": "Actividad 1", "calificacion": null},
+                    {"titulo": "Actividad 2", "calificacion": null}
+                ]
+            },
+            {
+                "titulo": "Advanced Java",
+                "progreso": 30,
+                "actividades": [
+                    {"titulo": "Actividad 1", "calificacion": null}
+                ]
+            }
+        ]
+    },
+    {
+        "nombre": "Maria Gomez",
+        "correo": "maria.gomez@example.com",
+        "contrasena": "password456",
+        "learningPaths": [
+            {
+                "titulo": "Java Basics",
+                "progreso": 70,
+                "actividades": [
+                    {"titulo": "Actividad 1", "calificacion": null}
+                ]
+            }
+        ]
+    },
+    {
+        "nombre": "Carlos Rodriguez",
+        "correo": "carlos.rodriguez@example.com",
+        "contrasena": "password789",
+        "learningPaths": [
+            {
+                "titulo": "Python for Data Science",
+                "progreso": 80,
+                "actividades": [
+                    {"titulo": "Actividad 1", "calificacion": null},
+                    {"titulo": "Actividad 2", "calificacion": null}
+                ]
+            },
+            {
+                "titulo": "Machine Learning",
+                "progreso": 60,
+                "actividades": [
+                    {"titulo": "Actividad 1", "calificacion": null}
+                ]
+            }
+        ]
+    }
+]
