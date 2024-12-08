@@ -46,10 +46,10 @@ public class ConsolaProfesorSwing {
         frame.setLayout(new GridLayout(8, 1));
 
         // Botones del menú
-        JButton btnRegistro = new JButton("Registrar/Iniciar sesión");
+        JButton btnRegistro = new JButton("Iniciar sesión");
         JButton btnCrearLP = new JButton("Crear Learning Path");
         JButton btnEditarLP = new JButton("Editar/Eliminar Learning Path");
-        JButton btnActividades = new JButton("Añadir/Editar actividades");
+        JButton btnActividades = new JButton("Añadir actividades");
         JButton btnProgreso = new JButton("Ver progreso de estudiantes");
         JButton btnCalificar = new JButton("Calificar actividades");
         JButton btnNotificaciones = new JButton("Ver notificaciones");
