@@ -16,22 +16,21 @@ import proyecto.Profesor;
 
 public class PersistenciaUsuarios {
 
-	private static final String NOMBRE = "nombre";
+    private static final String NOMBRE = "nombre";
     private static final String CORREO = "correo";
     private static final String CONTRASENA = "password";
     private static final String TIPO_USUARIO = "tipoUsuario";
-	
-    
-    
+    private static final String NOTIFICACIONES = "notificaciones";
+
     public List<Usuario> cargarUsuarios(String archivo) throws IOException {
         List<Usuario> usuarios = new ArrayList<>();
         String jsonCompleto = new String(Files.readAllBytes(new File(archivo).toPath()));
-        JSONObject raiz = new JSONObject( jsonCompleto );
+        JSONObject raiz = new JSONObject(jsonCompleto);
 
         cargarUsuarios(usuarios, raiz.getJSONArray("usuarios"));
         return usuarios;
     }
-    
+
     private void cargarUsuarios(List<Usuario> usuarios, JSONArray jUsuarios) {
         int numUsuarios = jUsuarios.length();
         for (int i = 0; i < numUsuarios; i++) {
@@ -49,6 +48,8 @@ public class PersistenciaUsuarios {
                     for (int j = 0; j < jNotificaciones.length(); j++) {
                         profesor.agregarNotificacion(jNotificaciones.getString(j));
                     }
+                }
+                nuevoUsuario = profesor;
             } else if ("Estudiante".equals(tipoUsuario)) {
                 nuevoUsuario = new Estudiante(nombre, username, password);
             }
@@ -56,21 +57,18 @@ public class PersistenciaUsuarios {
             usuarios.add(nuevoUsuario);
         }
     }
-    
+
     public void salvarUsuarios(String archivo, List<Usuario> usuarios) throws IOException {
         JSONObject jobject = new JSONObject();
         JSONArray jUsuarios = new JSONArray();
 
         for (Usuario usuario : usuarios) {
-        	
             JSONObject jUsuario = new JSONObject();
             jUsuario.put(NOMBRE, usuario.getNombre());
             jUsuario.put(CORREO, usuario.getCorreo());
             jUsuario.put(CONTRASENA, usuario.getContrasena());
             jUsuario.put(TIPO_USUARIO, usuario.getTipoUsuario());
-            jUsuarios.put(jUsuario);
-        }
-	    
+
             if (usuario instanceof Profesor) {
                 Profesor profesor = (Profesor) usuario;
                 JSONArray jNotificaciones = new JSONArray(profesor.getNotificaciones());
@@ -85,5 +83,4 @@ public class PersistenciaUsuarios {
             jobject.write(pw, 2, 0);
         }
     }
-
 }
