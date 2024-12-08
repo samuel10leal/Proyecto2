@@ -2,7 +2,10 @@ package proyecto;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
 
 public class LearningPath {
 	
@@ -19,7 +22,9 @@ public class LearningPath {
     private List<Actividad> actividades;
     private Profesor creador; // El profesor que creó el Learning Path
     private List<ProgresoPath> progresos; // Lista de progresos de los estudiantes
-    
+    private Map<Estudiante, Integer> progresoEstudiantes = new HashMap<>();
+    private List<Estudiante> estudiantes;
+	
 	//Constructor
     public LearningPath(String titulo, String descripcion, String objetivos, String nivelDificultad, Profesor creador, int duracionEstimada) {
 		super();
@@ -35,7 +40,9 @@ public class LearningPath {
         this.version = 1;
         this.progresos = new ArrayList<>(); // Inicializamos la lista de progresos
         this.rating = calcularPromedioRating();
-        //TO-DO RATING
+        this.progresoEstudiantes = new HashMap<>(); // Inicializamos el mapa de progreso
+        this.estudiantes = new ArrayList<>();
+	    
 	}
     
     //Get and set
@@ -150,5 +157,36 @@ public class LearningPath {
         	this.rating = 0;
         	return this.rating;
         }
+    }
+	
+	  public List<Estudiante> getEstudiantes() {
+        return estudiantes;
+    }
+
+    public void añadirEstudiante(Estudiante estudiante) {
+        if (!estudiantes.contains(estudiante)) {
+            estudiantes.add(estudiante);
+        }
+    }
+
+    public int getProgreso(Estudiante estudiante) {
+        return progresoEstudiantes.getOrDefault(estudiante, 0);
+    }
+
+    public void calificarActividad(String nombreEstudiante, String tituloActividad, double calificacion) {
+        for (Actividad actividad : actividades) {
+            if (actividad.getTitulo().equals(tituloActividad)) {
+                actividad.calificar(nombreEstudiante, calificacion);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Actividad no encontrada: " + tituloActividad);
+    }
+
+    public void setProgreso(Estudiante estudiante, int progreso) {
+        progresoEstudiantes.put(estudiante, progreso);
+    }
+    public void añadirActividad(Actividad actividad) {
+        this.actividades.add(actividad);
     }
 }
