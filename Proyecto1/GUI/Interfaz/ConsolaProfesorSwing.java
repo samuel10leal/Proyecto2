@@ -1,14 +1,17 @@
 package Interfaz;
 
+import Persistencia.PersistenciaProgreso;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Scanner;
 
 import proyecto.Actividad;
 import proyecto.Encuesta;
+import proyecto.Estudiante;
 import proyecto.Examen;
 import proyecto.LearningPath;
 import proyecto.Profesor;
@@ -17,6 +20,8 @@ import proyecto.RecursoEducativo;
 import proyecto.Registro;
 import proyecto.Tarea;
 import proyecto1.test.ActividadConcreta;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ConsolaProfesorSwing {
     private Registro registro;
@@ -354,11 +359,6 @@ public class ConsolaProfesorSwing {
             return solicitarNotaAprobacion();
         }
     }
-    
-    
-
-
-
 
     private void verProgresoEstudiantes() {
          if (!validarSesion()) return;
@@ -395,10 +395,71 @@ public class ConsolaProfesorSwing {
         JOptionPane.showMessageDialog(null, progreso.toString(), "Progreso de Estudiantes", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void calificarActividades() {
-        JOptionPane.showMessageDialog(null, "Funcionalidad aún no implementada.");
-    }
+   private void calificarActividades() {
+        if (!validarSesion()) return;
 
+        // Solicitar el nombre del estudiante
+        String nombreEstudiante = JOptionPane.showInputDialog("Ingrese el nombre del estudiante:");
+        if (nombreEstudiante == null || nombreEstudiante.trim().isEmpty()) {
+            return; // Terminar si el nombre está vacío o se cancela
+        }
+
+        // Obtener la lista de Learning Paths del estudiante
+        List<LearningPath> learningPaths = registro.getLearningPaths(nombreEstudiante);
+        if (learningPaths.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron Learning Paths para el estudiante.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Seleccionar el Learning Path
+        String[] learningPathTitles = learningPaths.stream()
+                                                   .map(LearningPath::getTitulo)
+                                                   .toArray(String[]::new);
+        String tituloLearningPath = (String) JOptionPane.showInputDialog(null, "Seleccione un Learning Path:", "Calificar Actividad", JOptionPane.QUESTION_MESSAGE, null, learningPathTitles, learningPathTitles[0]);
+        if (tituloLearningPath == null) return;
+
+        // Obtener el Learning Path seleccionado
+        LearningPath learningPath = learningPaths.stream()
+                                                 .filter(lp -> lp.getTitulo().equals(tituloLearningPath))
+                                                 .findFirst()
+                                                 .orElse(null);
+        if (learningPath == null) {
+            JOptionPane.showMessageDialog(null, "Learning Path no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Obtener la lista de actividades del Learning Path
+        List<Actividad> actividadesList = learningPath.getActividades();
+        String[] actividades = actividadesList.stream()
+                                              .map(Actividad::getTitulo)
+                                              .toArray(String[]::new);
+
+        // Seleccionar la actividad a calificar
+        String tituloActividad = (String) JOptionPane.showInputDialog(null, "Seleccione una actividad:", "Calificar Actividad", JOptionPane.QUESTION_MESSAGE, null, actividades, actividades[0]);
+        if (tituloActividad == null) return;
+
+        // Solicitar la calificación
+        String calificacionStr = JOptionPane.showInputDialog("Ingrese la calificación:");
+        if (calificacionStr == null || calificacionStr.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "La calificación no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            double calificacion = Double.parseDouble(calificacionStr);
+            learningPath.calificarActividad(nombreEstudiante, tituloActividad, calificacion);
+            JOptionPane.showMessageDialog(null, "Actividad calificada exitosamente.");
+
+            // Crear un objeto JSON con la calificación manualmente
+            CalificacionJson calificacionJson = new CalificacionJson(nombreEstudiante, tituloLearningPath, tituloActividad, calificacion);
+            String json = calificacionJson.toJson();
+            System.out.println("Calificación en JSON: " + json);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "La calificación debe ser un número.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+   }
+    
     private void verNotificaciones() {
           if (!validarSesion()) return;
 
