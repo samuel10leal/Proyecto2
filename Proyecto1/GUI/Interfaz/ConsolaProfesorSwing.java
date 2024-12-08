@@ -369,7 +369,19 @@ public class ConsolaProfesorSwing {
     }
 
     private void verNotificaciones() {
-        JOptionPane.showMessageDialog(null, "Funcionalidad aún no implementada.");
+          if (!validarSesion()) return;
+
+        if (profesorActual.getNotificaciones().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No tienes notificaciones.", "Notificaciones", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        StringBuilder notificaciones = new StringBuilder();
+        for (String notificacion : profesorActual.getNotificaciones()) {
+            notificaciones.append(notificacion).append("\n");
+        }
+
+        JOptionPane.showMessageDialog(null, notificaciones.toString(), "Notificaciones", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void main(String[] args) {
