@@ -3,6 +3,9 @@ package proyecto;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import Persistencia.PersistenciaUsuarios;
 
@@ -14,6 +17,7 @@ public class Registro {
 	private List<Usuario> usuarios;
 	private List<LearningPath> paths;
     private PersistenciaUsuarios persistencia;
+	private Map<String, List<LearningPath>> learningPathsPorEstudiante = new HashMap<>();
 
     
     //Constructor
@@ -100,7 +104,31 @@ public class Registro {
     public void agregarPaths(LearningPath lp) {
     	this.paths.add(lp);
     }
-
-
-
+public List<LearningPath> getLearningPaths(String nombre) {
+        Estudiante estudiante = getEstudiante(nombre);
+        if (estudiante == null) {
+            return new ArrayList<>(); // Retornar una lista vacía si el estudiante no existe
+        }
+        return paths.stream()
+                .filter(lp -> lp.getEstudiantes().contains(estudiante))
+                .collect(Collectors.toList());
+    }
+    
+    public LearningPath getLearningPath(String titulo) {
+        for (LearningPath lp : paths) {
+            if (lp.getTitulo().equalsIgnoreCase(titulo)) {
+                return lp;
+            }
+        }
+        return null;
+    }
+    public Estudiante getEstudiante(String nombre) {
+        for (Estudiante estudiante : estudiantes) {
+            if (estudiante.getNombre().equalsIgnoreCase(nombre)) {
+                return estudiante;
+            }
+        }
+        return null;
+    }
+    
 }
