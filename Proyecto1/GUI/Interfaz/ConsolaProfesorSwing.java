@@ -361,7 +361,38 @@ public class ConsolaProfesorSwing {
 
 
     private void verProgresoEstudiantes() {
-        JOptionPane.showMessageDialog(null, "Funcionalidad aún no implementada.");
+         if (!validarSesion()) return;
+
+        PersistenciaProgreso persistenciaProgreso = new PersistenciaProgreso();
+        try {
+            persistenciaProgreso.cargarProgresoEstudiantes("progresoEstudiantes.json", registro);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al cargar el progreso de los estudiantes.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Obtener la lista de estudiantes y su progreso
+        StringBuilder progreso = new StringBuilder();
+        List<Estudiante> estudiantes = registro.getEstudiantes();
+        progreso.append("Número de estudiantes: ").append(estudiantes.size()).append("\n");
+
+        for (Estudiante estudiante : estudiantes) {
+            progreso.append("Estudiante: ").append(estudiante.getNombre()).append("\n");
+            List<LearningPath> learningPaths = registro.getLearningPaths(estudiante.getNombre());
+            if (learningPaths.isEmpty()) {
+                progreso.append("  No hay Learning Paths asociados a este estudiante.\n");
+            } else {
+                for (LearningPath lp : learningPaths) {
+                    progreso.append("  Learning Path: ").append(lp.getTitulo()).append("\n");
+                    int progresoEstudiante = lp.getProgreso(estudiante);
+                    progreso.append("    Progreso: ").append(progresoEstudiante).append("%\n");
+                }
+            }
+        }
+
+        // Mostrar el progreso en un cuadro de diálogo
+        JOptionPane.showMessageDialog(null, progreso.toString(), "Progreso de Estudiantes", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void calificarActividades() {
