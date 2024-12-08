@@ -66,7 +66,7 @@ public class ConsolaProfesorSwing {
         frame.add(btnSalir);
 
         // Configurar acciones de los botones
-        btnRegistro.addActionListener(e -> manejarRegistroInicioSesion());
+        btnRegistro.addActionListener(e -> manejarInicioSesion());
         btnCrearLP.addActionListener(e -> crearLearningPath());
         btnEditarLP.addActionListener(e -> editarEliminarLearningPath());
         btnActividades.addActionListener(e -> añadirActividad());
@@ -79,7 +79,7 @@ public class ConsolaProfesorSwing {
         frame.setVisible(true);
     }
 
-    private void manejarRegistroInicioSesion() {
+    private void manejarInicioSesion() {
         JTextField correoField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
 
