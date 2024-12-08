@@ -20,6 +20,7 @@ public class PersistenciaUsuarios {
     private static final String CORREO = "correo";
     private static final String CONTRASENA = "password";
     private static final String TIPO_USUARIO = "tipoUsuario";
+	
     
     
     public List<Usuario> cargarUsuarios(String archivo) throws IOException {
@@ -42,7 +43,12 @@ public class PersistenciaUsuarios {
             Usuario nuevoUsuario = null;
 
             if ("Profesor".equals(tipoUsuario)) {
-                nuevoUsuario = new Profesor(nombre, username, password);
+                Profesor profesor = new Profesor(nombre, username, password);
+                if (usuario.has(NOTIFICACIONES)) {
+                    JSONArray jNotificaciones = usuario.getJSONArray(NOTIFICACIONES);
+                    for (int j = 0; j < jNotificaciones.length(); j++) {
+                        profesor.agregarNotificacion(jNotificaciones.getString(j));
+                    }
             } else if ("Estudiante".equals(tipoUsuario)) {
                 nuevoUsuario = new Estudiante(nombre, username, password);
             }
@@ -62,6 +68,15 @@ public class PersistenciaUsuarios {
             jUsuario.put(CORREO, usuario.getCorreo());
             jUsuario.put(CONTRASENA, usuario.getContrasena());
             jUsuario.put(TIPO_USUARIO, usuario.getTipoUsuario());
+            jUsuarios.put(jUsuario);
+        }
+	    
+            if (usuario instanceof Profesor) {
+                Profesor profesor = (Profesor) usuario;
+                JSONArray jNotificaciones = new JSONArray(profesor.getNotificaciones());
+                jUsuario.put(NOTIFICACIONES, jNotificaciones);
+            }
+
             jUsuarios.put(jUsuario);
         }
 
