@@ -24,6 +24,9 @@ public abstract class Actividad implements Cloneable{
     protected List<Reseña> reseñas;
     protected Map<Estudiante, String> respuesta;
     protected String tipo;
+    protected String titulo;
+    private Map<String, Double> calificaciones = new HashMap<>();
+    protected Double calificacion;
 	
 	//Constructor
 	public Actividad(LearningPath lp, String descripcion, String objetivo, String nivelDificultad,
@@ -41,6 +44,8 @@ public abstract class Actividad implements Cloneable{
 		this.respuesta = new HashMap <Estudiante, String>();
 		this.tipo = "";
 		this.reseñas = new ArrayList<>();
+		this.titulo = titulo;
+		this.calificaciones = new HashMap<>();
 	}
 	
 	//Get and set
@@ -186,5 +191,21 @@ public abstract class Actividad implements Cloneable{
 	    }
 	    return total / reseñas.size();
 	}
+	
+      public void calificar(String nombreEstudiante, double calificacion) {
+		calificaciones.put(nombreEstudiante, calificacion);
+		
+	}
+	
+	public Double getCalificacion() {
+        return calificacion;
+    }
+	 
+	public String getTitulo() {
+        return titulo;
+    }
+	 public void setCalificacion(Double calificacion) {
+	        this.calificacion = calificacion;
+	    }
 
 }
