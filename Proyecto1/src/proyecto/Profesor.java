@@ -12,12 +12,14 @@ public class Profesor extends Usuario {
 
 
 	//Atributos
+    private List<String> notificaciones;
     private List<LearningPath> learningPathsCreados;
     
     //Constructor
 	public Profesor(String nombre, String correo, String contrasena) {
 		super(nombre, correo, contrasena);
         this.learningPathsCreados = new ArrayList<>();
+	this.notificaciones = new ArrayList<>();
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -540,6 +542,10 @@ public class Profesor extends Usuario {
 			System.out.println("No tiene los permisos para calificar esta actividad.");
 		}
 	}
-	
-
+	public List<String> getNotificaciones() {
+        return notificaciones;
+    }
+	 public void agregarNotificacion(String notificacion) {
+	        notificaciones.add(notificacion);
+	    }
 }
