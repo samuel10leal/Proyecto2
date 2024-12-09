@@ -31,7 +31,7 @@ public class ConsolaProfesorSwing extends JFrame {
         registro = new Registro();
         profesorActual = null;
 
-        // Cargar usuarios desde archivo JSON
+        
         try {
             registro.cargarUsuarios("usuarios.json");
             JOptionPane.showMessageDialog(null, "Usuarios cargados exitosamente.");
