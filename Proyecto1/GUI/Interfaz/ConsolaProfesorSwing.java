@@ -23,7 +23,7 @@ import proyecto1.test.ActividadConcreta;
 import java.util.List;
 import java.util.ArrayList;
 
-public class ConsolaProfesorSwing {
+public class ConsolaProfesorSwing extends JFrame {
     private Registro registro;
     private Profesor profesorActual;
 
@@ -39,13 +39,17 @@ public class ConsolaProfesorSwing {
             JOptionPane.showMessageDialog(null, "Error al cargar usuarios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        // Crear ventana principal
-        JFrame frame = new JFrame("Consola del Profesor");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
-        frame.setLayout(new GridLayout(8, 1));
+        setTitle("Consola del Profesor");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(600, 400);
+        setLocationRelativeTo(null);
 
-        // Botones del menú
+        ImagePanel panel = new ImagePanel(new ImageIcon("imagenes/fondoEstudiante.png").getImage());
+        panel.setLayout(new GridBagLayout());
+
+        JPanel subPanel = new JPanel(new GridLayout(8, 1, 10, 10));
+        subPanel.setOpaque(false);
+
         JButton btnRegistro = new JButton("Iniciar sesión");
         JButton btnCrearLP = new JButton("Crear Learning Path");
         JButton btnEditarLP = new JButton("Editar/Eliminar Learning Path");
@@ -55,17 +59,18 @@ public class ConsolaProfesorSwing {
         JButton btnNotificaciones = new JButton("Ver notificaciones");
         JButton btnSalir = new JButton("Salir");
 
-        // Agregar botones al frame
-        frame.add(btnRegistro);
-        frame.add(btnCrearLP);
-        frame.add(btnEditarLP);
-        frame.add(btnActividades);
-        frame.add(btnProgreso);
-        frame.add(btnCalificar);
-        frame.add(btnNotificaciones);
-        frame.add(btnSalir);
+        subPanel.add(btnRegistro);
+        subPanel.add(btnCrearLP);
+        subPanel.add(btnEditarLP);
+        subPanel.add(btnActividades);
+        subPanel.add(btnProgreso);
+        subPanel.add(btnCalificar);
+        subPanel.add(btnNotificaciones);
+        subPanel.add(btnSalir);
 
-        // Configurar acciones de los botones
+        panel.add(subPanel, new GridBagConstraints());
+        add(panel);
+
         btnRegistro.addActionListener(e -> manejarInicioSesion());
         btnCrearLP.addActionListener(e -> crearLearningPath());
         btnEditarLP.addActionListener(e -> editarEliminarLearningPath());
@@ -75,8 +80,8 @@ public class ConsolaProfesorSwing {
         btnNotificaciones.addActionListener(e -> verNotificaciones());
         btnSalir.addActionListener(e -> System.exit(0));
 
-        // Mostrar ventana
-        frame.setVisible(true);
+
+        setVisible(true);
     }
 
     private void manejarInicioSesion() {
