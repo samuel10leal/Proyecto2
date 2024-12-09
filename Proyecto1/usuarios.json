@@ -1,6 +1,24 @@
-{"usuarios": [{
-  "password": "pass456",
-  "correo": "luis@example.com",
-  "tipoUsuario": "Estudiante",
-  "nombre": "luis"
-}]}
+{"usuarios": [
+  {
+    "password": "password123",
+    "correo": "gomez@example.com",
+    "tipoUsuario": "Profesor",
+    "nombre": "Gomez"
+  },
+  {
+    "password": "pass456",
+    "correo": "luis@example.com",
+    "tipoUsuario": "Estudiante",
+    "nombre": "Luis"
+  },
+      {
+		"password": "password",
+		"correo": "smith@example.com",
+		"tipoUsuario": "Profesor",
+        "nombre": "Smith",
+        "notificaciones": [
+          "Nueva tarea asignada.",
+          "Reunión de departamento el viernes."
+        ]
+      }
+]}

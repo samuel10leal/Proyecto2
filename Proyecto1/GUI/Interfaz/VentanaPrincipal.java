@@ -55,8 +55,8 @@ public class VentanaPrincipal extends JFrame {
         btnProfesor.setBackground(new Color(60, 179, 113)); // Color verde claro
         btnProfesor.setFocusPainted(false);
         btnProfesor.addActionListener(e -> {
-            PersistenciaUsuarios persistencia = new PersistenciaUsuarios();
-            new ConsolaProfesorSwing(persistencia); // Lanza la interfaz de profesores
+            
+            new ConsolaProfesorSwing(); // Lanza la interfaz de profesores
             dispose(); // Cierra la ventana principal
         });
         panelBotones.add(btnProfesor);
