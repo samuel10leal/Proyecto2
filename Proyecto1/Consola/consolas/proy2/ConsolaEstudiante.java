@@ -2,20 +2,25 @@ package consolas.proy2;
 
 import proyecto.*;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ConsolaEstudiante {
     private Scanner scanner;
     private Estudiante estudianteActual;
     private Map<String, Estudiante> estudiantesRegistrados;
+    private Map<String, Map<String, Integer>> actividadesPorDia;
 
     public ConsolaEstudiante() {
         this.scanner = new Scanner(System.in);
         this.estudiantesRegistrados = new HashMap<>();
+        this.actividadesPorDia = new HashMap<>();
         cargarEstudiantes();
     }
 
@@ -30,7 +35,8 @@ public class ConsolaEstudiante {
                 case 2 -> loginEstudiante();
                 case 3 -> verLearningPathsYActividades();
                 case 4 -> realizarActividad();
-                case 5 -> {
+                case 5 -> mostrarGraficoActividades();
+                case 6 -> {
                     System.out.println("Saliendo...");
                     return;
                 }
@@ -45,7 +51,8 @@ public class ConsolaEstudiante {
         System.out.println("2. Iniciar Sesión");
         System.out.println("3. Ver Learning Paths y Actividades");
         System.out.println("4. Realizar Actividad");
-        System.out.println("5. Salir");
+        System.out.println("5. Ver Gráfico de Actividades");
+        System.out.println("6. Salir");
         System.out.print("Selecciona una opción: ");
     }
 
@@ -92,8 +99,6 @@ public class ConsolaEstudiante {
             return;
         }
 
-        System.out.println("===== Learning Paths y Actividades =====");
-
         String archivoLearningPaths = "./datos/learningpaths.json";
         try (BufferedReader reader = new BufferedReader(new FileReader(archivoLearningPaths))) {
             StringBuilder jsonContent = new StringBuilder();
@@ -110,9 +115,10 @@ public class ConsolaEstudiante {
                 return;
             }
 
+            System.out.println("\n===== Learning Paths y Actividades =====");
             for (int i = 0; i < learningPathsArray.length(); i++) {
                 JSONObject lp = learningPathsArray.getJSONObject(i);
-                System.out.println("Learning Path: " + lp.getString("titulo"));
+                System.out.println("\nLearning Path: " + lp.getString("titulo"));
                 System.out.println("Descripción: " + lp.getString("descripcion"));
                 System.out.println("Dificultad: " + lp.getString("nivelDificultad"));
                 System.out.println("Duración Estimada: " + lp.getInt("duracionEstimada") + " minutos");
@@ -123,6 +129,8 @@ public class ConsolaEstudiante {
                     JSONObject actividad = actividades.getJSONObject(j);
                     System.out.println("  - " + actividad.getString("descripcion") +
                             " (Dificultad: " + actividad.getString("nivelDificultad") + ")");
+                    System.out.println("    Objetivo: " + actividad.getString("objetivo"));
+                    System.out.println("    Duración Estimada: " + actividad.getInt("duracionEsperada") + " minutos");
                 }
             }
         } catch (Exception e) {
@@ -130,13 +138,34 @@ public class ConsolaEstudiante {
         }
     }
 
+    private void registrarActividad() {
+        if (estudianteActual == null) {
+            System.out.println("No se puede registrar la actividad. Ningún estudiante ha iniciado sesión.");
+            return;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaHoy = sdf.format(new Date());
+
+        // Obtener o inicializar el registro de actividades del día actual
+        actividadesPorDia.putIfAbsent(fechaHoy, new HashMap<>());
+        Map<String, Integer> actividadesEstudiante = actividadesPorDia.get(fechaHoy);
+
+        // Incrementar el conteo de actividades para el estudiante actual
+        String correoEstudiante = estudianteActual.getCorreo();
+        actividadesEstudiante.put(correoEstudiante,
+                actividadesEstudiante.getOrDefault(correoEstudiante, 0) + 1);
+
+        System.out.println("Actividad registrada correctamente para " + correoEstudiante +
+                " en la fecha " + fechaHoy + ".");
+    }
+
+    // Método para realizar una actividad
     private void realizarActividad() {
         if (estudianteActual == null) {
             System.out.println("Por favor, inicia sesión primero.");
             return;
         }
-
-        System.out.println("===== Realizar Actividad =====");
 
         String archivoLearningPaths = "./datos/learningpaths.json";
         try (BufferedReader reader = new BufferedReader(new FileReader(archivoLearningPaths))) {
@@ -154,17 +183,15 @@ public class ConsolaEstudiante {
             }
 
             List<JSONObject> actividadesDisponibles = new ArrayList<>();
+            System.out.println("\nActividades disponibles:");
             int contador = 1;
-            System.out.println("Actividades disponibles:");
             for (int i = 0; i < learningPathsArray.length(); i++) {
                 JSONArray actividades = learningPathsArray.getJSONObject(i).getJSONArray("actividades");
                 for (int j = 0; j < actividades.length(); j++) {
                     JSONObject actividad = actividades.getJSONObject(j);
                     actividadesDisponibles.add(actividad);
-                    System.out.println(contador + ". " +
-                            actividad.getString("descripcion") + " (Dificultad: " + actividad.getString("nivelDificultad") + ")");
-                    System.out.println("   Objetivo: " + actividad.getString("objetivo"));
-                    System.out.println("   Duración Estimada: " + actividad.getInt("duracionEsperada") + " minutos");
+                    System.out.println(contador + ". " + actividad.getString("descripcion") +
+                            " (" + actividad.getString("nivelDificultad") + ")");
                     contador++;
                 }
             }
@@ -174,9 +201,16 @@ public class ConsolaEstudiante {
                 return;
             }
 
-            System.out.print("Selecciona el número de la actividad que deseas realizar: ");
-            int seleccion = scanner.nextInt();
-            scanner.nextLine();
+            System.out.print("\nSelecciona el número de la actividad que deseas realizar: ");
+            int seleccion;
+            try {
+                seleccion = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, ingresa un número.");
+                scanner.nextLine(); // Limpiar entrada
+                return;
+            }
 
             if (seleccion < 1 || seleccion > actividadesDisponibles.size()) {
                 System.out.println("Selección inválida. Inténtalo de nuevo.");
@@ -184,36 +218,35 @@ public class ConsolaEstudiante {
             }
 
             JSONObject actividadSeleccionada = actividadesDisponibles.get(seleccion - 1);
-            System.out.println("Has seleccionado la actividad: " + actividadSeleccionada.getString("descripcion"));
-            System.out.println("Objetivo: " + actividadSeleccionada.getString("objetivo"));
-            System.out.println("Nivel de dificultad: " + actividadSeleccionada.getString("nivelDificultad"));
-            System.out.println("Duración estimada: " + actividadSeleccionada.getInt("duracionEsperada") + " minutos");
+            System.out.println("\nRealizando actividad: " + actividadSeleccionada.getString("descripcion"));
 
-            System.out.print("¿Deseas realizar esta actividad? (si/no): ");
-            String confirmacion = scanner.nextLine().toLowerCase();
-            if (!confirmacion.equals("si")) {
-                System.out.println("Actividad cancelada.");
-                return;
+            try {
+                Thread.sleep(2000); // Simulación
+                System.out.println("¡Actividad completada exitosamente!");
+                registrarActividad(); // Registrar la actividad realizada
+            } catch (InterruptedException e) {
+                System.out.println("Error durante la simulación de la actividad.");
             }
-
-            int duracion = actividadSeleccionada.getInt("duracionEsperada");
-            System.out.print("La actividad tiene una duración estimada de " + duracion +
-                    " minutos. ¿Cuánto tiempo tienes disponible (en minutos)?: ");
-            int tiempoDisponible = scanner.nextInt();
-            scanner.nextLine();
-
-            if (tiempoDisponible < duracion) {
-                System.out.println("No tienes tiempo suficiente para realizar esta actividad.");
-                return;
-            }
-
-            System.out.println("Realizando actividad...");
-            Thread.sleep(2000);
-            System.out.println("¡Actividad completada exitosamente!");
-
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo de Learning Paths: " + e.getMessage());
+        } catch (JSONException e) {
+            System.out.println("Error al procesar el archivo JSON: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error al realizar la actividad: " + e.getMessage());
+            System.out.println("Error inesperado: " + e.getMessage());
         }
+    }
+
+
+
+    private void mostrarGraficoActividades() {
+        System.out.println("\n===== Gráfico de Actividades =====");
+        actividadesPorDia.forEach((fecha, actividades) -> {
+            System.out.print(fecha + ": ");
+            actividades.forEach((correo, cantidad) -> {
+                System.out.print(correo + " (" + cantidad + ") ");
+            });
+            System.out.println();
+        });
     }
 
     public static void main(String[] args) {
@@ -221,4 +254,3 @@ public class ConsolaEstudiante {
         consola.iniciar();
     }
 }
-

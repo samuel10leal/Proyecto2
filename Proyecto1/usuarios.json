@@ -1,6 +1,7 @@
 {"usuarios": [
   {
     "password": "password123",
+    "notificaciones": [],
     "correo": "gomez@example.com",
     "tipoUsuario": "Profesor",
     "nombre": "Gomez"
@@ -11,14 +12,32 @@
     "tipoUsuario": "Estudiante",
     "nombre": "Luis"
   },
-      {
-		"password": "password",
-		"correo": "smith@example.com",
-		"tipoUsuario": "Profesor",
-        "nombre": "Smith",
-        "notificaciones": [
-          "Nueva tarea asignada.",
-          "Reunión de departamento el viernes."
-        ]
-      }
+  {
+    "password": "password",
+    "notificaciones": [
+      "Nueva tarea asignada.",
+      "Reunión de departamento el viernes."
+    ],
+    "correo": "smith@example.com",
+    "tipoUsuario": "Profesor",
+    "nombre": "Smith"
+  },
+  {
+    "password": "luis",
+    "correo": "luis",
+    "tipoUsuario": "Estudiante",
+    "nombre": "luis"
+  },
+  {
+    "password": "1",
+    "correo": "1",
+    "tipoUsuario": "Estudiante",
+    "nombre": "1"
+  },
+  {
+    "password": "3",
+    "correo": "3",
+    "tipoUsuario": "Estudiante",
+    "nombre": "3"
+  }
 ]}
