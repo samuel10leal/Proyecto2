@@ -340,7 +340,7 @@ public class ConsolaEstudianteSwing extends JFrame {
         }
 
         JFrame frame = new JFrame("Actividades Anuales");
-        frame.setSize(1000, 800);
+        frame.setSize(500, 200);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
