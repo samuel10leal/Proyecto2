@@ -1,6 +1,8 @@
 package Interfaz;
 
 import Persistencia.PersistenciaProgreso;
+import Persistencia.PersistenciaUsuarios;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,27 +25,89 @@ import proyecto1.test.ActividadConcreta;
 import java.util.List;
 import java.util.ArrayList;
 
+<<<<<<< Upstream, based on branch 'main' of https://github.com/samuel10leal/Proyecto2.git
 public class ConsolaProfesorSwing extends JFrame {
     private Registro registro;
     private Profesor profesorActual;
+=======
+>>>>>>> 3399a34 estudiante
 
-    public ConsolaProfesorSwing() {
-        registro = new Registro();
-        profesorActual = null;
+    public class ConsolaProfesorSwing extends JFrame {
+        private Registro registro;
+        private Profesor profesorActual;
 
+<<<<<<< Upstream, based on branch 'main' of https://github.com/samuel10leal/Proyecto2.git
         
         try {
             registro.cargarUsuarios("usuarios.json");
             JOptionPane.showMessageDialog(null, "Usuarios cargados exitosamente.");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al cargar usuarios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+=======
+        // Constructor modificado para recibir PersistenciaUsuarios
+        public ConsolaProfesorSwing(PersistenciaUsuarios persistencia) {
+            registro = new Registro();
+            profesorActual = null;
+
+            // Cargar usuarios desde archivo JSON
+            try {
+                registro.cargarUsuarios("usuarios.json");
+                JOptionPane.showMessageDialog(null, "Usuarios cargados exitosamente.");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error al cargar usuarios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Crear ventana principal
+            JFrame frame = new JFrame("Consola del Profesor");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(600, 400);
+            frame.setLayout(new GridLayout(8, 1));
+
+            // Botones del menú
+            JButton btnRegistro = new JButton("Iniciar sesión");
+            JButton btnCrearLP = new JButton("Crear Learning Path");
+            JButton btnEditarLP = new JButton("Editar/Eliminar Learning Path");
+            JButton btnActividades = new JButton("Añadir actividades");
+            JButton btnProgreso = new JButton("Ver progreso de estudiantes");
+            JButton btnCalificar = new JButton("Calificar actividades");
+            JButton btnNotificaciones = new JButton("Ver notificaciones");
+            JButton btnSalir = new JButton("Salir");
+
+            // Agregar botones al frame
+            frame.add(btnRegistro);
+            frame.add(btnCrearLP);
+            frame.add(btnEditarLP);
+            frame.add(btnActividades);
+            frame.add(btnProgreso);
+            frame.add(btnCalificar);
+            frame.add(btnNotificaciones);
+            frame.add(btnSalir);
+
+            // Configurar acciones de los botones
+            btnRegistro.addActionListener(e -> manejarInicioSesion());
+            btnCrearLP.addActionListener(e -> crearLearningPath());
+            btnEditarLP.addActionListener(e -> editarEliminarLearningPath());
+            btnActividades.addActionListener(e -> añadirActividad());
+            btnProgreso.addActionListener(e -> verProgresoEstudiantes());
+            btnCalificar.addActionListener(e -> calificarActividades());
+            btnNotificaciones.addActionListener(e -> verNotificaciones());
+            btnSalir.addActionListener(e -> System.exit(0));
+
+            // Mostrar ventana
+            frame.setVisible(true);
+>>>>>>> 3399a34 estudiante
         }
 
+<<<<<<< Upstream, based on branch 'main' of https://github.com/samuel10leal/Proyecto2.git
         setTitle("Consola del Profesor");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setLocationRelativeTo(null);
+=======
+    
+>>>>>>> 3399a34 estudiante
 
+<<<<<<< Upstream, based on branch 'main' of https://github.com/samuel10leal/Proyecto2.git
         ImagePanel panel = new ImagePanel(new ImageIcon("imagenes/fondoEstudiante.png").getImage());
         panel.setLayout(new GridBagLayout());
 
@@ -85,6 +149,9 @@ public class ConsolaProfesorSwing extends JFrame {
     }
 
     private void manejarInicioSesion() {
+=======
+	private void manejarInicioSesion() {
+>>>>>>> 3399a34 estudiante
         JTextField correoField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
 
@@ -482,6 +549,6 @@ public class ConsolaProfesorSwing extends JFrame {
     }
 
     public static void main(String[] args) {
-        new ConsolaProfesorSwing();
+        
     }
 }

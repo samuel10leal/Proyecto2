@@ -1,5 +1,7 @@
 package Interfaz;
 
+
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,7 +11,9 @@ import java.util.List;
 import Persistencia.PersistenciaUsuarios;
 import proyecto.Estudiante;
 import proyecto.Usuario;
-
+import javax.swing.border.EmptyBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 public class ConsolaEstudianteSwing extends JFrame {
     private PersistenciaUsuarios persistencia; // Instancia de PersistenciaUsuarios para cargar y guardar usuarios
     private Estudiante estudianteActual; // Almacena el estudiante que ha iniciado sesión
@@ -35,12 +39,13 @@ public class ConsolaEstudianteSwing extends JFrame {
         JPanel subPanel = new JPanel(new GridLayout(5, 1, 10, 10));
         subPanel.setOpaque(false); // Hacer el subpanel transparente para ver la imagen de fondo
 
-        // Botones del menú
-        JButton btnRegistro = new JButton("Registrar Estudiante");
-        JButton btnIniciar = new JButton("Iniciar Sesión");
-        JButton btnVerLearning = new JButton("Ver Learning Paths y Actividades");
-        JButton btnRealizarActividades = new JButton("Realizar Actividad");
-        JButton btnSalir = new JButton("Salir");
+     // Botones del menú
+        JButton btnRegistro = crearBotonConEstilo("Registrar Estudiante", "imagenes/iconoRegistro.png");
+        JButton btnIniciar = crearBotonConEstilo("Iniciar Sesión", "imagenes/iconoIniciar.png");
+        JButton btnVerLearning = crearBotonConEstilo("Ver Learning Paths y Actividades", "imagenes/iconoLearning.png");
+        JButton btnRealizarActividades = crearBotonConEstilo("Realizar Actividad", "imagenes/iconoActividad.png");
+        JButton btnSalir = crearBotonConEstilo("Salir", "imagenes/iconoSalir.png");
+
 
         // Añadir los botones al subpanel
         subPanel.add(btnRegistro);
@@ -175,8 +180,39 @@ public class ConsolaEstudianteSwing extends JFrame {
 
     // Método principal que inicia la aplicación
     public static void main(String[] args) {
-        PersistenciaUsuarios persistencia = new PersistenciaUsuarios(); // Crea una instancia de PersistenciaUsuarios
-        new ConsolaEstudianteSwing(persistencia); // Crea una instancia de ConsolaEstudianteSwing y la muestra
+        PersistenciaUsuarios persistencia = new PersistenciaUsuarios();
+        new ConsolaEstudianteSwing(persistencia);
+    }
+
+    private JButton crearBotonConEstilo(String texto, String rutaIcono) {
+        JButton boton = new JButton(texto);
+        boton.setFocusPainted(false);
+        boton.setFont(new Font("Arial", Font.BOLD, 14));
+        boton.setBackground(new Color(60, 179, 113)); // Color verde claro
+        boton.setForeground(Color.WHITE);
+        boton.setBorder(new EmptyBorder(10, 10, 10, 10));
+        boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        // Añadir icono si se proporciona
+        if (rutaIcono != null && !rutaIcono.isEmpty()) {
+            boton.setIcon(new ImageIcon(rutaIcono));
+            boton.setHorizontalTextPosition(SwingConstants.RIGHT);
+        }
+
+        // Efecto hover
+        boton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                boton.setBackground(new Color(46, 139, 87)); // Cambia a un verde más oscuro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                boton.setBackground(new Color(60, 179, 113)); // Vuelve al verde claro
+            }
+        });
+
+        return boton;
     }
 }
 
